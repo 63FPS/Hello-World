@@ -16,11 +16,11 @@ _stack_t *stack_init() {
       return NULL;
     }
 
-    //toDo set stack->stack_ptr to start index '-1'
-    //toDo set stack->MAX_SIZE to 1024;
+    stack->stack_ptr = -1;
+    stack->MAX_SIZE = 1024;
     memset(stack->container, 0, 1024);
 
-    //toDo return the stack pointer
+    return stack;
 }
 
 
@@ -29,6 +29,9 @@ _stack_t *stack_init() {
  * @param stack
  */
 void stack_destroy(_stack_t *stack) {
+    if (stack == NULL) {
+        return;
+    }
     free(stack);
 }
 
@@ -40,13 +43,17 @@ void stack_destroy(_stack_t *stack) {
  */
 void *stack_pop(_stack_t *stack) {
     
-    //toDo check if stack is valid (invalid = NULL)
-    // if stack is NULL then return NULL
-    
+    if (stack == NULL) {
+        perror("Cannot pop value from stack, beacuse it is NULL");
+        return NULL;
+    }
 
-    //toDo check if stack is empty, if so return NULL (no element available)
+    if (stack_is_empty == 0) {
+        perror("Stack is empty");
+        return NULL;
+    }
 
-    //toDo return the current TopOfStack and decrement the stack pointer
+    return stack->container[stack->stack_ptr--];
 }
 
 
@@ -56,8 +63,18 @@ void *stack_pop(_stack_t *stack) {
  * @return TOS on success, NULL on error (set errno)
  */
 void *stack_top(_stack_t *stack) {
-	//toDo return Top Of Stack if stack is valid and non-empty, else
-	// return NULL
+
+    if (stack == NULL) {
+        perror("Stack is invalid");
+        return NULL;
+    }
+
+	if (stack_is_empty == 0) {
+        perror("Stack is empty");
+        return NULL;
+    }
+
+    return stack->container[stack->stack_ptr];
 }
 
 
@@ -68,8 +85,10 @@ void *stack_top(_stack_t *stack) {
  * @return 0 on success, -1 on error (set errno)
  */
 int stack_push(_stack_t *stack, void *data) {
-    //toDo check if stack is valid and non-full else return -1
-    
+    if (stack == NULL) {
+        perror("Stack is invalid");
+        return -1;
+    }
     //toDo increment stack pointer and insert value
 }
 
@@ -80,11 +99,16 @@ int stack_push(_stack_t *stack, void *data) {
  * @return 0 if stack is empty, 1 if not, -1 on error (set errno)
  */
 int stack_is_empty(_stack_t *stack) {
-    //toDo check if stack if valid else return -1
-    
+    if (stack == NULL) {
+        perror("Stack is invalid");
+        return -1;
+    }
     //return 0 if empty, -1 if not empty
+    if (stack->stack_ptr == -1)
+      return 0;
+    else 
+      return -1;
 }
-
 
 /**
  * This function checks if stack is full
@@ -92,9 +116,15 @@ int stack_is_empty(_stack_t *stack) {
  * @return 0 if stack is full, 1 if not, -1 on error (set errno)
  */
 int stack_is_full(_stack_t *stack) {
-    //toDo check if stack is valid
+    if (stack == NULL) {
+        perror("Stack is invalid");
+        return -1;
     
-    //return 0 if stack is full, -1 if stack is not full
+    if (stack->MAX_SIZE == stack->stack_ptr + 1)
+      return 0;
+    else 
+      return -1;
+    
 }
 
 
@@ -104,8 +134,10 @@ int stack_is_full(_stack_t *stack) {
  * @return size of stack, -1 on error set errno on error
  */
 int stack_size(_stack_t *stack) {
-    //toDo check if stack is valid
-
-    //return current stack size	= stack_ptr + 1
+    if (stack == NULL) {
+        perror("Stack is invalid");
+      return -1;
+    else 
+      return stack->stack_ptr +1;
 }
 
