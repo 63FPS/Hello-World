@@ -2,13 +2,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node {
-   int data;
-   struct node *next;
-};
 
-struct node *head = NULL;
-struct node *current = NULL;
+_list_t *create_list();
+      _list_t*list;
+
+      if (0 > (list = (_list_t *) malloc(sizeof(_list_t)))) {
+        perror("malloc() failed. Cannot acquire memory for the list");
+        return NULL;
+    }
+
+void destroy_list(_list_t *list) {
+    if (list == NULL) {
+        return;
+    }
+
+    free(list);
+}
+
+typdef struct node {
+   void *data;
+   struct node *next;
+} node_t;
+
+typdef struct list {
+   node_t *head;
+   node_t *last;
+}
 
 void printList() {
 

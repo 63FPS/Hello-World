@@ -32,6 +32,7 @@ void stack_destroy(_stack_t *stack) {
     if (stack == NULL) {
         return;
     }
+
     free(stack);
 }
 
@@ -48,7 +49,7 @@ void *stack_pop(_stack_t *stack) {
         return NULL;
     }
 
-    if (stack_is_empty == 0) {
+    if (stack_is_empty(stack) == 0) {
         perror("Stack is empty");
         return NULL;
     }
@@ -69,7 +70,7 @@ void *stack_top(_stack_t *stack) {
         return NULL;
     }
 
-	if (stack_is_empty == 0) {
+	if (stack_is_empty(stack) == 0) {
         perror("Stack is empty");
         return NULL;
     }
@@ -85,11 +86,20 @@ void *stack_top(_stack_t *stack) {
  * @return 0 on success, -1 on error (set errno)
  */
 int stack_push(_stack_t *stack, void *data) {
+    
     if (stack == NULL) {
         perror("Stack is invalid");
         return -1;
     }
-    //toDo increment stack pointer and insert value
+
+    if (stack_is_full(stack) == 0) {
+        perror("Stack is already full");
+        return -1;
+    }
+
+    stack->stack_ptr ++;
+    stack->container[stack->stack_ptr] = data;
+    return 0;
 }
 
 
@@ -103,11 +113,12 @@ int stack_is_empty(_stack_t *stack) {
         perror("Stack is invalid");
         return -1;
     }
-    //return 0 if empty, -1 if not empty
-    if (stack->stack_ptr == -1)
+
+    if (stack->stack_ptr == -1) {
+      return 1;
+    } else {
       return 0;
-    else 
-      return -1;
+    }
 }
 
 /**
@@ -119,12 +130,14 @@ int stack_is_full(_stack_t *stack) {
     if (stack == NULL) {
         perror("Stack is invalid");
         return -1;
+    }
     
-    if (stack->MAX_SIZE == stack->stack_ptr + 1)
+    if (stack->MAX_SIZE == stack->stack_ptr + 1) {
       return 0;
-    else 
+    } else {
       return -1;
-    
+    }
+
 }
 
 
@@ -137,7 +150,8 @@ int stack_size(_stack_t *stack) {
     if (stack == NULL) {
         perror("Stack is invalid");
       return -1;
-    else 
+    } else {
       return stack->stack_ptr +1;
+    }
 }
 
